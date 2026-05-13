@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QA Intelligence Suite</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">QA</div>
+          <div>
+            <p class="eyebrow">AI Quality Assurance</p>
+            <h1>QA Intelligence Suite</h1>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <button class="nav-item active" data-view="dashboard" type="button">
+            <span class="nav-icon">D</span>
+            Dashboard
+          </button>
+          <button class="nav-item" data-view="plans" type="button">
+            <span class="nav-icon">P</span>
+            Test Plans
+          </button>
+          <button class="nav-item" data-view="scripts" type="button">
+            <span class="nav-icon">S</span>
+            Test Scripts
+          </button>
+          <button class="nav-item" data-view="risk" type="button">
+            <span class="nav-icon">R</span>
+            Risk Analysis
+          </button>
+          <button class="nav-item" data-view="reports" type="button">
+            <span class="nav-icon">X</span>
+            Reports
+          </button>
+        </nav>
+
+        <div class="sidebar-panel">
+          <p class="panel-title">Project Status</p>
+          <div class="metric-row">
+            <span>Suites</span>
+            <strong id="suiteCount">0</strong>
+          </div>
+          <div class="metric-row">
+            <span>Scripts</span>
+            <strong id="scriptCount">0</strong>
+          </div>
+          <div class="metric-row">
+            <span>Risk Score</span>
+            <strong id="riskScore">0</strong>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Workspace</p>
+            <h2 id="viewTitle">Dashboard</h2>
+          </div>
+          <div class="topbar-actions">
+            <button class="secondary-action" id="saveStateBtn" type="button" title="Download a dated Codex project handoff save state">
+              Project Save State
+            </button>
+            <button class="primary-action" id="exportFullReportBtn" type="button" title="Download the current project report">
+              Export Report
+            </button>
+          </div>
+        </header>
+
+        <section class="view active" id="dashboard" aria-labelledby="dashboard-title">
+          <div class="dashboard-grid">
+            <section class="workspace-panel project-panel">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Project Setup</p>
+                  <h3 id="dashboard-title">QA engagement profile</h3>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <label>
+                  Project name
+                  <input id="projectName" type="text" placeholder="Example: CRM onboarding refresh">
+                </label>
+                <label>
+                  Application or channel
+                  <input id="applicationArea" type="text" placeholder="Email, web, app, API, CRM">
+                </label>
+                <label>
+                  Release target
+                  <input id="releaseTarget" type="text" placeholder="Sprint, milestone, date, or launch window">
+                </label>
+                <label>
+                  QA owner
+                  <input id="qaOwner" type="text" placeholder="Owner or team">
+                </label>
+              </div>
+
+              <label>
+                Scope summary
+                <textarea id="scopeSummary" rows="5" placeholder="Describe the business goal, affected experiences, channels, integrations, and launch expectations."></textarea>
+              </label>
+
+              <div class="quick-actions">
+                <button class="primary-action" id="generateAllBtn" type="button">Generate QA Package</button>
+                <button class="secondary-action" id="clearWorkspaceBtn" type="button">Clear Workspace</button>
+              </div>
+            </section>
+
+            <section class="workspace-panel">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Readiness</p>
+                  <h3>Coverage snapshot</h3>
+                </div>
+              </div>
+              <div class="readiness-list" id="readinessList"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="plans" aria-labelledby="plans-title">
+          <section class="workspace-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Test Plans / Test Suites</p>
+                <h3 id="plans-title">Create a structured QA plan</h3>
+              </div>
+              <button class="primary-action" id="generatePlanBtn" type="button">Generate Plan</button>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                Platforms
+                <input id="platforms" type="text" placeholder="Desktop, mobile web, iOS, Android, API">
+              </label>
+              <label>
+                Test types
+                <input id="testTypes" type="text" placeholder="Functional, regression, accessibility, data, UAT">
+              </label>
+              <label>
+                Known constraints
+                <input id="constraints" type="text" placeholder="Compressed timeline, limited test data, legal review pending">
+              </label>
+              <label>
+                Acceptance criteria
+                <input id="acceptanceCriteria" type="text" placeholder="Critical requirements or definition of done">
+              </label>
+            </div>
+
+            <div class="generated-layout">
+              <div>
+                <h4>AI Draft Plan</h4>
+                <textarea id="testPlanOutput" rows="20" placeholder="Generated test plan appears here. You can edit it before exporting."></textarea>
+              </div>
+              <div>
+                <h4>Suite Builder</h4>
+                <div class="suite-list" id="suiteList"></div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="scripts" aria-labelledby="scripts-title">
+          <section class="workspace-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Test Scripts</p>
+                <h3 id="scripts-title">Generate manual and Gherkin scripts</h3>
+              </div>
+              <button class="primary-action" id="generateScriptsBtn" type="button">Generate Scripts</button>
+            </div>
+
+            <div class="script-controls">
+              <label>
+                Script format
+                <select id="scriptFormat">
+                  <option value="manual">Manual QA steps</option>
+                  <option value="gherkin">Gherkin scenarios</option>
+                  <option value="hybrid">Manual + Gherkin</option>
+                </select>
+              </label>
+              <label>
+                Test data notes
+                <textarea id="testDataNotes" rows="4" placeholder="Accounts, campaign IDs, user roles, sample data, exclusions, or environment details."></textarea>
+              </label>
+            </div>
+
+            <textarea id="scriptOutput" rows="24" placeholder="Generated scripts appear here."></textarea>
+          </section>
+        </section>
+
+        <section class="view" id="risk" aria-labelledby="risk-title">
+          <div class="risk-grid">
+            <section class="workspace-panel">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Project Manager Documentation</p>
+                  <h3 id="risk-title">Analyze risk and knowledge gaps</h3>
+                </div>
+                <button class="primary-action" id="analyzeRiskBtn" type="button">Analyze</button>
+              </div>
+
+              <label class="file-drop">
+                <input id="docUpload" type="file" multiple accept=".txt,.md,.csv,.json,.html,.htm,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx">
+                <span>Upload documentation files</span>
+                <small>Text-based files are read directly. Binary PM documents are logged so you can paste extracted text below.</small>
+              </label>
+
+              <label>
+                Documentation text
+                <textarea id="documentationInput" rows="17" placeholder="Paste project briefs, CRFs, requirements, PM notes, content matrices, acceptance criteria, change logs, or meeting notes."></textarea>
+              </label>
+            </section>
+
+            <section class="workspace-panel">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">AI Analysis</p>
+                  <h3>Risk report</h3>
+                </div>
+              </div>
+              <div class="risk-summary" id="riskSummary"></div>
+              <textarea id="riskOutput" rows="22" placeholder="Risk analysis appears here."></textarea>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="reports" aria-labelledby="reports-title">
+          <section class="workspace-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Outputs</p>
+                <h3 id="reports-title">Build and download reports</h3>
+              </div>
+              <div class="report-actions">
+                <button class="secondary-action" id="copyReportBtn" type="button">Copy Report</button>
+                <button class="primary-action" id="downloadReportBtn" type="button">Download Markdown</button>
+              </div>
+            </div>
+
+            <div class="report-filter">
+              <label><input type="checkbox" class="report-section" value="plan" checked> Test plan</label>
+              <label><input type="checkbox" class="report-section" value="scripts" checked> Test scripts</label>
+              <label><input type="checkbox" class="report-section" value="risk" checked> Risk analysis</label>
+              <label><input type="checkbox" class="report-section" value="gaps" checked> Knowledge gaps</label>
+            </div>
+
+            <textarea id="reportOutput" rows="28" placeholder="The compiled report appears here."></textarea>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
